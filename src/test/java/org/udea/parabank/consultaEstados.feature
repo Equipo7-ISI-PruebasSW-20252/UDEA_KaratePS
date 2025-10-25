@@ -33,7 +33,7 @@ Feature: Consulta de cuenta en Parabank
         * print response
         And match response == 'Could not find customer #' + <customerId>
       Examples:
-        |customerId     |
+        |customerId     | 
         |22222  |
         |1234   |
         |55     |
