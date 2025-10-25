@@ -28,7 +28,7 @@ Feature: Consulta de cuenta en Parabank
         Given path 'customers'
         And path <customerId>
         And path 'accounts'
-        When method GET
+        When method GET 
         Then status 400
         * print response
         And match response == 'Could not find customer #' + <customerId>
