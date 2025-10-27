@@ -4,7 +4,6 @@ Feature: Simulación de préstamo en Parabank
   Background:
     * url baseUrl
     * header Accept = 'application/json'
-    * def faker = new config.faker()
     * def val_customerId = 12212
     * def val_accountId = 13344
     * def val_amount = Math.round(Math.random() * 1000)
