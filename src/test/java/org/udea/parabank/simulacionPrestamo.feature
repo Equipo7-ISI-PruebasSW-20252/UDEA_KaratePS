@@ -27,3 +27,17 @@ Feature: Simulación de préstamo en Parabank
       accountId: '#number'
     }
     """
+
+    Scenario: Solicitud de préstamo fallida por cuenta inexistente
+        * def invalidAccountId = 13341
+        * def val_amount = Math.round(Math.random() * 1000)
+        * def val_downPayment = Math.round(Math.random() * 1000)
+        Given path 'requestLoan'
+        And param customerId = val_customerId
+        And param amount = val_amount
+        And param downPayment = val_downPayment
+        And param fromAccountId = invalidAccountId
+        When method POST
+        Then status 400
+        * print 'Respuesta de error:', response
+        And match response == 'Could not find account #' + invalidAccountId
