@@ -11,4 +11,10 @@ class TestRunner {
                 .outputCucumberJson(true);
     }
 
+    @Karate.Test
+    Karate test02_SimulacionPrestamo() {
+        return Karate.run("simulacionPrestamo")
+                .relativeTo(getClass())
+                .outputCucumberJson(true);
+    }
 }
