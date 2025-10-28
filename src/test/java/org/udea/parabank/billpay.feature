@@ -1,10 +1,9 @@
 @parabank_billpay
-Feature: billpay
+Feature: Pago fallido por saldo insuficiente en Parabank
 
-  Background
+  Background:
     * url baseUrl
-    * header Accept = 'text/html'
-    * header Content-Type = 'application/x-www-form-urlencoded'
+    * header Accept = 'application/json'
     * def val_fromAccountId = 12567
     * def val_payeeName = 'hola'
     * def val_payeeStreet = '123 Main St'
@@ -14,6 +13,7 @@ Feature: billpay
     * def val_payeePhone = '123-456-7890'
     * def val_accountNumber = 12345
     * def val_verifyAccount = 12345
+    * def val_amount_ok = Math.round(Math.random() * 100)
     * def val_amount_insufficient = val_amount_ok + 100000
 
   Scenario: Pago fallido por saldo insuficiente
@@ -29,9 +29,6 @@ Feature: billpay
     And form field amount = val_amount_insufficient
     And form field fromAccountId = val_fromAccountId
     When method POST
-    * print 'responseStatus ->', responseStatus
-    * print 'raw response ->', response
-    * def respText = ''
-    * eval if (typeof response !== 'undefined' && response !== null) respText = response.toString().toLowerCase()
-    * print 'respText ->', respText
-    * assert (responseStatus == 400 || responseStatus == 422) && (respText.indexOf('insufficient') != -1 || respText.indexOf('could not') != -1)
+    Then status 400
+    * print 'Respuesta de error (raw):', responseStatus, response
+    And match response contains 'Insufficient'
