@@ -1,5 +1,5 @@
 @Parabank_billpay
-Feature: Pago fallido por saldo insuficiente
+Feature: billpay
 
   Background:
     * url 'https://parabank.parasoft.com/parabank/services/bank'
