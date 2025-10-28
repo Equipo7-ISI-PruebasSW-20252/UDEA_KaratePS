@@ -1,9 +1,10 @@
 @parabank_billpay
-Feature: Billpay
+Feature: billpay
 
-  Background:
+  Background
     * url baseUrl
-    * header Accept = 'application/json'
+    * header Accept = 'text/html'
+    * header Content-Type = 'application/x-www-form-urlencoded'
     * def val_fromAccountId = 12567
     * def val_payeeName = 'hola'
     * def val_payeeStreet = '123 Main St'
@@ -28,7 +29,9 @@ Feature: Billpay
     And form field amount = val_amount_insufficient
     And form field fromAccountId = val_fromAccountId
     When method POST
-    * print 'Respuesta Pago Fallido ->', responseStatus, response
-    Then status 400 || status 422
-    * def lower = response != null ? response.toString().toLowerCase() : ''
-    * assert lower.indexOf('insufficient') != -1 || lower.indexOf('could not') != -1
+    * print 'responseStatus ->', responseStatus
+    * print 'raw response ->', response
+    * def respText = ''
+    * eval if (typeof response !== 'undefined' && response !== null) respText = response.toString().toLowerCase()
+    * print 'respText ->', respText
+    * assert (responseStatus == 400 || responseStatus == 422) && (respText.indexOf('insufficient') != -1 || respText.indexOf('could not') != -1)
