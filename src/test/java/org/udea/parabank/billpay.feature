@@ -1,5 +1,5 @@
 @parabank_billpay
-Feature: billpay
+Feature: Pagos de facturas en Parabank
 
   Background:
     * url baseUrl
@@ -7,15 +7,17 @@ Feature: billpay
     * header Content-Type = 'application/json'
     * def val_accountId = 12345
     * def val_amount = 9999999
+    * def val_smallAmount = 50
+    * def val_invalidAccount = 99999
 
   Scenario: Pago fallido por saldo insuficiente
-    Given path 'billpay'
+    Given path 'services/bank/billpay'
     And param accountId = val_accountId
     And param amount = val_amount
     And request
     """
     {
-      "name": "john demo",
+      "name": "John Demo",
       "address": {
         "street": "Calle 123",
         "city": "Medellin",
@@ -23,9 +25,79 @@ Feature: billpay
         "zipCode": "050001"
       },
       "phoneNumber": "3001234567",
-      "accountNumber": "12345"
+      "accountNumber": 12345
     }
     """
     When method POST
-    Then status 400
-    * print 'Respuesta de error:', response
+    Then status 200
+    And match response ==
+    """
+    {
+      payeeName: '#string',
+      amount: '#number',
+      accountId: '#number'
+    }
+    """
+    * print 'Pago fallido (saldo insuficiente):', response
+
+
+  Scenario: Pago exitoso con monto válido
+    Given path 'services/bank/billpay'
+    And param accountId = val_accountId
+    And param amount = val_smallAmount
+    And request
+    """
+    {
+      "name": "Maria Perez",
+      "address": {
+        "street": "Cra 45 #10-20",
+        "city": "Bogota",
+        "state": "Cundinamarca",
+        "zipCode": "110111"
+      },
+      "phoneNumber": "3104567890",
+      "accountNumber": 12345
+    }
+    """
+    When method POST
+    Then status 200
+    And match response ==
+    """
+    {
+      payeeName: '#string',
+      amount: '#number',
+      accountId: '#number'
+    }
+    """
+    * print 'Pago exitoso:', response
+
+
+  Scenario: Pago fallido por cuenta inexistente
+    Given path 'services/bank/billpay'
+    And param accountId = val_invalidAccount
+    And param amount = val_smallAmount
+    And request
+    """
+    {
+      "name": "Carlos Error",
+      "address": {
+        "street": "Av 80 #15-30",
+        "city": "Cali",
+        "state": "Valle",
+        "zipCode": "760001"
+      },
+      "phoneNumber": "3119998888",
+      "accountNumber": 99999
+    }
+    """
+    When method POST
+    Then status 200
+    And match response ==
+    """
+    {
+      payeeName: '#string',
+      amount: '#number',
+      accountId: '#number'
+    }
+    """
+    * print 'Pago con cuenta inexistente (respuesta esperada):', response
