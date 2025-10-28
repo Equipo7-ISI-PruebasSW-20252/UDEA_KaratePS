@@ -35,5 +35,5 @@ Feature: Consulta de cuenta en Parabank
   Examples:
     |customerId     | 
     |22222  |
-    |1234   |
+    |0000   |
     |55     |
