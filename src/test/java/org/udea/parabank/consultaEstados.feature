@@ -16,7 +16,7 @@ Feature: Consulta de cuentas en Parabank
 
     # Validar que haya al menos una cuenta
     And assert response.length > 0
-
+ 
     # Validar estructura de cada cuenta
     And match each response ==
     """
