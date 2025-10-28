@@ -27,5 +27,5 @@ Feature: billpay
     }
     """
     When method POST
-    Then status == 400
+    Then status 400
     * print 'Respuesta de error:', response
