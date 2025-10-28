@@ -5,25 +5,34 @@ Feature: Login to Parabank
     * url baseUrl
     * header Accept = 'application/json'
 
-  Scenario: Customer Login
+  Scenario: Successful login with valid credentials
     Given path 'login'
-    And path 'john' 
-    And path 'demo' 
+    And param username = 'john'
+    And param password = 'demo'
     When method GET
     Then status 200
     And match response ==
     """
     {
-       "id": '#number',
-       "firstName": '#string',
-       "lastName": '#string',
-       "address": {
-            "street": '#string',
-            "city": '#string',
-            "state": '#string',
-            "zipCode": '#string'
-        },
-       "phoneNumber": '#string',
-       "ssn": '#string'
+       id: '#number',
+       firstName: '#string',
+       lastName: '#string',
+       address: {
+            street: '#string',
+            city: '#string',
+            state: '#string',
+            zipCode: '#string'
+       },
+       phoneNumber: '#string',
+       ssn: '#string'
     }
     """
+    And match response.firstName == 'John'
+
+  Scenario: Failed login with invalid credentials
+    Given path 'login'
+    And param username = 'john'
+    And param password = 'wrongpass'
+    When method GET
+    Then status 400
+    And match response contains { error: '#string' }
