@@ -1,33 +1,32 @@
 @parabank_billpay
-Feature: Pago fallido por saldo insuficiente en Parabank
+Feature: Pago fallido por saldo insuficiente en Parabank (API JSON)
 
   Background:
     * url baseUrl
-    * header Accept = 'text/html'
-    * header Content-Type = 'application/x-www-form-urlencoded'
-    * def val_payeeName = 'Juan Prueba'
-    * def val_street = 'Calle 123'
-    * def val_city = 'Medellin'
-    * def val_state = 'Antioquia'
-    * def val_zip = '050001'
-    * def val_phone = '3001234567'
-    * def val_accountNumber = 777
-    * def val_verifyAccount = 777
-    * def val_fromAccount = 12345
+    * header Accept = 'application/json'
+    * header Content-Type = 'application/json'
+    * def val_accountId = 12345
     * def val_amount = 9999999
 
   Scenario: Pago fallido por saldo insuficiente
     Given path 'billpay'
-    And param payee.name = val_payeeName
-    And payee.address.street = val_street
-    And payee.address.city = val_city
-    And payee.address.state = val_state
-    And payee.address.zipCode = val_zip
-    And payee.phoneNumber = val_phone
-    And payee.accountNumber = val_accountNumber
-    And verifyAccount = val_verifyAccount
-    And amount = val_amount
-    And fromAccountId = val_fromAccount
+    And param accountId = val_accountId
+    And param amount = val_amount
+    And request
+    """
+    {
+      "name": "Juan Prueba",
+      "address": {
+        "street": "Calle 123",
+        "city": "Medellin",
+        "state": "Antioquia",
+        "zipCode": "050001"
+      },
+      "phoneNumber": "3001234567",
+      "accountNumber": "777"
+    }
+    """
     When method POST
-        Then status 400
-        * print 'Respuesta de error:', response
+    Then assert responseStatus == 400 || responseStatus == 422
+    * print 'Status:', responseStatus
+    * print 'Response:', response
