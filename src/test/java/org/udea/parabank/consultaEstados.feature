@@ -13,10 +13,8 @@ Feature: Consulta de cuentas en Parabank
     And match header Content-Type contains 'application/json'
     * print 'La información de las cuentas es:'
     * print response
-
     # Validar que haya al menos una cuenta
     And assert response.length > 0
- 
     # Validar estructura de cada cuenta
     And match each response ==
     """
@@ -27,7 +25,6 @@ Feature: Consulta de cuentas en Parabank
       balance: '#number'
     }
     """
-
     # Validar que el customerId sea consistente
     And match each response.customerId == val_customerId
 
