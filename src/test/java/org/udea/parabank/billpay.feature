@@ -2,24 +2,22 @@
 Feature: Pago fallido por saldo insuficiente
 
   Background:
-    * url baseUrl
-    * header Content-Type = 'application/json'
+    * url 'https://parabank.parasoft.com/parabank/services/bank'
+    * header Content-Type = 'application/x-www-form-urlencoded'
 
-  Scenario: Intentar pago con monto mayor al saldo
+  Scenario: Simular pago con monto mayor al saldo disponible
     Given path 'billpay'
-    And request
-      """
-      {
-        "accountId": 12345,
-        "amount": 9999999,
-        "payeeName": "Utility Company",
-        "payeeAddressStreet": "123 Main St",
-        "payeeAddressCity": "Metropolis",
-        "payeeAddressState": "CA",
-        "payeeAddressZipCode": "90210",
-        "payeePhoneNumber": "123-456-7890"
-      }
-      """
+    And form field payee.name = 'hola'
+    And form field payee.address.street = '123 Main St'
+    And form field payee.address.city = 'Metropolis'
+    And form field payee.address.state = 'CA'
+    And form field payee.address.zipCode = '90210'
+    And form field payee.phoneNumber = '123-456-7890'
+    And form field payee.accountNumber = '12345'
+    And form field verifyAccount = '12345'
+    And form field amount = '777'
+    And form field fromAccountId = '12567'
     When method post
     Then status 400 || status 422
     And match response contains 'Insufficient funds'
+
