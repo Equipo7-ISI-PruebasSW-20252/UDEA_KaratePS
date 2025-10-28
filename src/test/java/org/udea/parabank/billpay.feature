@@ -1,5 +1,5 @@
 @parabank_billpay
-Feature: Pago fallido por saldo insuficiente en Parabank (API JSON)
+Feature: billpay
 
   Background:
     * url baseUrl
@@ -15,7 +15,7 @@ Feature: Pago fallido por saldo insuficiente en Parabank (API JSON)
     And request
     """
     {
-      "name": "Juan Prueba",
+      "name": "john demo",
       "address": {
         "street": "Calle 123",
         "city": "Medellin",
@@ -23,10 +23,9 @@ Feature: Pago fallido por saldo insuficiente en Parabank (API JSON)
         "zipCode": "050001"
       },
       "phoneNumber": "3001234567",
-      "accountNumber": "777"
+      "accountNumber": "12345"
     }
     """
     When method POST
-    Then assert responseStatus == 400 || responseStatus == 422
-    * print 'Status:', responseStatus
-    * print 'Response:', response
+    Then status == 400
+    * print 'Respuesta de error:', response
