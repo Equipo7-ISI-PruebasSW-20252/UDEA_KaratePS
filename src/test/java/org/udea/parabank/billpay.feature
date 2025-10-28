@@ -11,7 +11,7 @@ Feature: Pagos de facturas en Parabank
     * def val_invalidAccount = 99999
 
   Scenario: Pago fallido por saldo insuficiente
-    Given path 'services/bank/billpay'
+    Given path 'billpay'
     And param accountId = val_accountId
     And param amount = val_amount
     And request
@@ -42,7 +42,7 @@ Feature: Pagos de facturas en Parabank
 
 
   Scenario: Pago exitoso con monto válido
-    Given path 'services/bank/billpay'
+    Given path 'billpay'
     And param accountId = val_accountId
     And param amount = val_smallAmount
     And request
@@ -73,7 +73,7 @@ Feature: Pagos de facturas en Parabank
 
 
   Scenario: Pago fallido por cuenta inexistente
-    Given path 'services/bank/billpay'
+    Given path 'billpay'
     And param accountId = val_invalidAccount
     And param amount = val_smallAmount
     And request
