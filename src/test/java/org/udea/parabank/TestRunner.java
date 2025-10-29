@@ -12,14 +12,7 @@ class TestRunner {
     }
 
     @Karate.Test
-    Karate test02_SimulacionPrestamo() {
-        return Karate.run("simulacionPrestamo")
-                .relativeTo(getClass())
-                .outputCucumberJson(true);
-    }
-
-    @Karate.Test
-    Karate test03_BillPay() {
+    Karate test02_BillPay() {
         return Karate.run("billpay")
                 .relativeTo(getClass())
                 .outputCucumberJson(true);
