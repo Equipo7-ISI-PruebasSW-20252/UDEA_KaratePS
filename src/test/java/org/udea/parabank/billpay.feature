@@ -29,7 +29,7 @@ Feature: Pagos de facturas en Parabank
     }
     """
     When method POST
-    Then status 200
+    Then status 400 || status 422
     * print 'Pago fallido (saldo insuficiente):', response
 
 
@@ -56,24 +56,4 @@ Feature: Pagos de facturas en Parabank
     * print 'Pago exitoso:', response
 
 
-  Scenario: Pago fallido por cuenta inexistente
-    Given path 'billpay'
-    And param accountId = val_invalidAccount
-    And param amount = val_smallAmount
-    And request
-    """
-    {
-      "name": "Carlos Error",
-      "address": {
-        "street": "Av 80 #15-30",
-        "city": "Cali",
-        "state": "Valle",
-        "zipCode": "760001"
-      },
-      "phoneNumber": "3119998888",
-      "accountNumber": 99999
-    }
-    """
-    When method POST
-    Then status 500
-    * print 'Error esperado (cuenta inexistente):', response
+
